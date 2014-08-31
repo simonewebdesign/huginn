@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20140820003139) do
     t.boolean  "propagate_immediately", default: false, null: false
     t.boolean  "disabled",              default: false, null: false
     t.string   "guid",                                  null: false
+    t.integer  "service_id"
   end
 
   add_index "agents", ["guid"], name: "index_agents_on_guid", using: :btree
@@ -119,6 +120,25 @@ ActiveRecord::Schema.define(version: 20140820003139) do
   end
 
   add_index "scenarios", ["user_id", "guid"], name: "index_scenarios_on_user_id_and_guid", unique: true, using: :btree
+
+  create_table "services", force: true do |t|
+    t.integer  "user_id",                       null: false
+    t.string   "provider",                      null: false
+    t.string   "name",                          null: false
+    t.text     "token",                         null: false
+    t.text     "secret"
+    t.text     "refresh_token"
+    t.datetime "expires_at"
+    t.boolean  "global",        default: false
+    t.text     "options"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "uid"
+  end
+
+  add_index "services", ["provider"], name: "index_services_on_provider", using: :btree
+  add_index "services", ["uid"], name: "index_services_on_uid", using: :btree
+  add_index "services", ["user_id", "global"], name: "index_services_on_user_id_and_global", using: :btree
 
   create_table "user_credentials", force: true do |t|
     t.integer  "user_id",                           null: false

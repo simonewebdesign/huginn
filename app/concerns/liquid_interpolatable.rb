@@ -1,6 +1,23 @@
 module LiquidInterpolatable
   extend ActiveSupport::Concern
 
+  included do
+    validate :validate_interpolation
+  end
+
+  def valid?(context = nil)
+    super
+  rescue Liquid::Error
+    errors.empty?
+  end
+
+  def validate_interpolation
+    interpolated
+  rescue Liquid::Error => e
+    errors.add(:options, "has an error with Liquid templating: #{e.message}")
+    false
+  end
+
   def interpolate_options(options, event = {})
     case options
       when String
@@ -26,11 +43,28 @@ module LiquidInterpolatable
   end
 
   require 'uri'
-  # Percent encoding for URI conforming to RFC 3986.
-  # Ref: http://tools.ietf.org/html/rfc3986#page-12
   module Filters
+    # Percent encoding for URI conforming to RFC 3986.
+    # Ref: http://tools.ietf.org/html/rfc3986#page-12
     def uri_escape(string)
-      CGI::escape string
+      CGI.escape(string) rescue string
+    end
+
+    # Escape a string for use in XPath expression
+    def to_xpath(string)
+      subs = string.to_s.scan(/\G(?:\A\z|[^"]+|[^']+)/).map { |x|
+        case x
+        when /"/
+          %Q{'#{x}'}
+        else
+          %Q{"#{x}"}
+        end
+      }
+      if subs.size == 1
+        subs.first
+      else
+        'concat(' << subs.join(', ') << ')'
+      end
     end
   end
   Liquid::Template.register_filter(LiquidInterpolatable::Filters)
