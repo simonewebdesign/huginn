@@ -30,7 +30,8 @@ end
 # Windows does not have zoneinfo files, so bundle the tzinfo-data gem.
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 
-gem 'mysql2', '~> 0.3.16'
+# gem 'mysql2', '~> 0.3.16'
+gem 'pg'
 gem 'devise', '~> 3.2.4'
 gem 'kaminari', '~> 0.16.1'
 gem 'bootstrap-kaminari-views', '~> 0.0.3'

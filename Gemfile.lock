@@ -186,7 +186,6 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.3.16)
     naught (1.0.0)
     net-ftp-list (3.2.8)
     nokogiri (1.6.3.1)
@@ -399,7 +398,6 @@ DEPENDENCIES
   kramdown (~> 1.3.3)
   liquid (~> 2.6.1)
   mqtt
-  mysql2 (~> 0.3.16)
   net-ftp-list (~> 3.2.8)
   nokogiri (~> 1.6.1)
   pg
